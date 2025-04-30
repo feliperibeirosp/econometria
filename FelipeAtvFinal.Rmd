@@ -1,0 +1,244 @@
+---
+title: "Modelo de Regressão Beta para Índice GINI"
+author: "Felipe Ribeiro"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    highlight: true
+---
+
+## Índice GINI
+
+O índice GINI é usado para avaliar a desigualdade de riquezas ou distribuicao de renda de uma população.
+O valor varia entre 0 e 1, sendo que quanto mais próximo de 1, maior o nível de desigualdade. 
+
+## Introdução e Objetivos
+
+Vamos analisar o Índice Gini para os múnicipios do Estado Rio Grande do Sul
+temos como objetivo a partir dos nossos dados, determinar qual das váriavéis tem influência
+para determinar o índice Gini para os municípios. Vamos utilizar a analise de regressão beta.
+
+## Analise de Regressão Beta
+
+A regressão Beta é um modelo utilizado para modelar variáveis dependentes contínuas que variam entre 0 e 1.
+Este modelo é baseado na distribuição Beta, que é flexível e permite a modelagem de uma grande variedade de formas para dados restritos ao intervalo [0, 1]. Ao contrário da regressão linear, que pode prever valores fora desse intervalo, a regressão Beta assegura que as previsões permaneçam dentro dos limites estabelecidos.
+
+Neste estudo, utilizamos a regressão Beta para analisar a relação entre o índice de Gini (uma medida de desigualdade de renda) e diversas variáveis socioeconômicas e demográficas. O modelo permite identificar fatores significativos associados ao índice de Gini, fornecendo uma visão mais precisa e adequada para variáveis com essas características restritas.
+
+```{r setup, echo=FALSE}
+pacman::p_load(knitr, DT,psych, dplyr, gt, betareg, ggplot2, corrplot)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+options(scipen = 999)
+```
+
+## Dados
+### Descrição das Variaveis
+
+
+```{r, echo=FALSE}
+dados <- data.frame(
+  Variável = c(
+    "GINI", "POP", "COD_MUNICIPIO", "NM_MUNICIPIO", "UF", 
+    "AGUA_ENCANADA_PRINCIPAL", "NAO_POSSUI_AGUA_ENCANADA", "NAO_POSSUI_LIGACAO_ESGOTO", 
+    "NAO_TINHAM_BANHEIRO_NEM_SANITARIO", "PERC_COLETA_LIXO", "PERC_ACESSO_INTERNET", 
+    "PERC_ALFA_15MAIS", "QTD_FORM_SUP_EDUC", "QTD_FORM_SUP", "TX_CRESC_GEO", 
+    "DENSIDADE_DEMO", "INDICE_ENVELHECIMENTO", "POP_PRETA", "POP_PARDA", 
+    "PIB_BRUTO", "PARTICIPACAO_PIB_UF", "PARTICIPACAO_PIB_MESOREGIAO", 
+    "TX_PESSOAS_PRETA_OU_PARDA", "PIB_POR_HABITANTE", "TX_HOMICIDIO", 
+    "TX_SUICIDIO", "EXPORTACAO_PERCAPITA", "POUPANCA_PERCAPITA", 
+    "ARRECADACAO_TOTAL_IMPOSTOS_PERCAPITA", "DESP_CIENCIA_TEC_PERCAPITA", 
+    "VALOR_TOTAL_BF_PERCAPITA", "DESP_LEGISLATIVO_PERCAPITA", 
+    "RECEITA_IPTU_PERCAPITA", "COTA_PARTE_FPM_PERCAPITA", 
+    "DESP_SAUDE_SANEAMENTO_PERCAPITA", "OPERACOES_CREDITO_PERCAPITA", 
+    "INDICADOR_REND_P_FUND", "SAEB_MEDIA_FUND", "IDEB_2021_FUND", 
+    "INDICADOR_REND_P_ENS_MEDIO", "SAEB_MEDIA_ENS_MEDIO", "IDEB_2021_ENS_MEDIO"
+  ),
+  Descrição = c(
+    "Índice de Gini", "Quantidade de habitantes", "Código do município", "Nome do município", "Unidade de Federação do município",
+    "Taxa de domicílios com água encanada como fonte principal", "Taxa de domicílios sem ligação de água com rede geral",
+    "Taxa de domicílios sem ligação de esgoto", "Taxa de domicílios sem banheiro nem sanitário",
+    "Percentual de domicílios com coleta de lixo", "Percentual de domicílios com acesso à internet",
+    "Percentual de pessoas alfabetizadas com 15 anos ou mais", "Qtd. com curso superior em educação",
+    "Qtd. com curso superior", "Taxa de crescimento geométrico", "Densidade demográfica",
+    "Índice de envelhecimento", "População de pessoas pretas", "População de pessoas pardas",
+    "Produto Interno Bruto", "Participação do PIB na UF", "Participação do PIB na Mesoregião",
+    "Taxa de pessoas pretas ou pardas", "PIB per capita", "Taxa de homicídios", "Taxa de suicídio",
+    "Exportação per capita", "Poupança per capita", "Arrecadação total de impostos per capita",
+    "Despesas com ciência e tecnologia per capita", "Gasto com Bolsa Família per capita",
+    "Despesa com Legislativo per capita", "Receita de IPTU per capita", "Cota Parte FPM per capita",
+    "Despesa com saúde e saneamento per capita", "Operações de crédito per capita",
+    "Indicador de rendimento P - ensino fundamental", "Nota média SAEB - ensino fundamental",
+    "Nota IDEB - ensino fundamental", "Indicador de rendimento P - ensino médio",
+    "Nota média SAEB - ensino médio", "Nota IDEB - ensino médio"
+  )
+)
+
+datatable(dados, options = list(pageLength = 10), caption = 'Dicionário de Variáveis')
+
+```
+
+### Exemplo dos Dados de um Município
+
+```{r analise, echo=FALSE}
+
+dados <- read.csv("dados_final_projeto_rs.csv", sep=";", header=TRUE)
+
+registro <- dados |> filter(NM_MUNICIPIO == "porto alegre")
+
+tabela_vertical <- as.data.frame(t(registro))
+names(tabela_vertical) <- "Valor"
+tabela_vertical$Variável <- rownames(tabela_vertical)
+rownames(tabela_vertical) <- NULL
+
+# Reorganiza colunas
+tabela_vertical <- tabela_vertical |> select(Variável, Valor)
+
+# Exibe com estilo
+tabela_vertical |> 
+  gt() |> 
+  tab_header(
+    title = "Dados do Município: Porto Alegre"
+  )
+
+
+
+
+```
+
+### Analise Descritiva
+
+- **`vars`**: Número da variável.
+- **`n`**: Número de observações válidas.
+- **`mean`**: Média aritmética da variável.
+- **`sd`**: Desvio padrão, que indica a variação dos valores em relação à média.
+- **`median`**: Mediana da variável.
+- **`mad`**: Desvio absoluto mediano, uma medida robusta de dispersão.
+- **`min`**: Valor mínimo observado.
+- **`max`**: Valor máximo observado.
+- **`range`**: Amplitude, diferença entre o valor máximo e mínimo.
+- **`skew`**: Assimetria da distribuição dos dados.
+- **`kurtosis`**: Curtose da distribuição.
+- **`se`**: Erro padrão da média, que indica a precisão da média calculada.
+
+```{r, echo=FALSE}
+estatisticas <- describe(dados[,c( -1, -2, -3)])
+estatisticas$mean <- format(estatisticas$mean, digits = 2, nsmall = 2)
+estatisticas$sd <- format(estatisticas$sd, digits = 2, nsmall = 2)
+estatisticas$min <- format(estatisticas$min, digits = 2, nsmall = 2)
+estatisticas$max <- format(estatisticas$max, digits = 2, nsmall = 2)
+
+kable(estatisticas, caption = "Estatísticas Descritivas")
+```
+
+
+## Modelo de Analise de Regressao Beta
+### Variaveis Removidas por Dados Faltantes
+  NAO_POSSUI_LIGACAO_ESGOTO
+  NAO_TINHAM_BANHEIRO_NEM_SANITARIO
+  EXPORTACAO_PERCAPITA
+  POUPANCA_PERCAPITA
+  DESP_CIENCIA_TEC_PERCAPITA
+  DESP_LEGISLATIVO_PERCAPITA
+  
+  RECEITA_IPTU_PERCAPITA
+  COTA_PARTE_FPM_PERCAPITA
+  OPERACOES_CREDITO_PERCAPITA
+  INDICADOR_REND_P_FUND
+  SAEB_MEDIA_FUND
+  IDEB_2021_FUND
+  INDICADOR_REND_P_ENS_MEDIO
+  SAEB_MEDIA_ENS_MEDIO
+  IDEB_2021_ENS_MEDIO*
+  
+### Variaveis Tratadas por Dados Faltantes
+O não existia o índice GINI para o município Pinto Bandeira, entao foi incluido neste
+dado a média do índice GINI de todos os municípios.
+
+A variavel NAO_POSSUI_AGUA_ENCANADA, nao existia valor para o municipio Presidente Lucena,
+entretanto na váriavel Agua_encanada_principal tinhamos uma taxa de 99.5, portanto foi atribuido
+zero a este valor para o município.
+
+### Modelo
+
+```{r}
+modelo <- betareg(GINI ~ AGUA_ENCANADA_PRINCIPAL + NAO_POSSUI_AGUA_ENCANADA + 
+    PERC_COLETA_LIXO + PERC_ACESSO_INTERNET + 
+    PERC_ALFA_15MAIS + QTD_FORM_SUP_EDUC + QTD_FORM_SUP + TX_CRESC_GEO + 
+    DENSIDADE_DEMO + INDICE_ENVELHECIMENTO + POP_PRETA + POP_PARDA + 
+    PIB_BRUTO + PARTICIPACAO_PIB_UF + PARTICIPACAO_PIB_MESOREGIAO + 
+    TX_PESSOAS_PRETA_OU_PARDA + PIB_POR_HABITANTE + TX_HOMICIDIO + 
+    TX_SUICIDIO + 
+    ARRECADACAO_TOTAL_IMPOSTOS_PERCAPITA + 
+    VALOR_TOTAL_BF_PERCAPITA +
+    DESP_SAUDE_SANEAMENTO_PERCAPITA, data = dados) 
+
+summary(modelo)
+```
+
+#### Analise
+<br>
+Podemos observar acima que a váriavel que mais tem influencia no índice GINI é a: <br>
+<br>
+PIB_POR_HABITANTE. <br>
+<br>
+##### Temos outras com forte relação também sendo elas:  <br>
+<br>
+PERC_COLETA_LIXO (p = 0.01572) <br>
+PERC_ACESSO_INTERNET (p = 0.02309) <br>
+PERC_ALFA_15MAIS (p = 0.02077) <br>
+QTD_FORM_SUP_EDUC (p = 0.00840) <br>
+TX_CRESC_GEO (p = 0.04159) <br>
+POP_PRETA (p = 0.00782) <br>
+TX_SUICIDIO (p = 0.02138) <br>
+ARRECADACAO_TOTAL_IMPOSTOS_PERCAPITA (p = 0.00253) <br>
+VALOR_TOTAL_BF_PERCAPITA (p = 0.00233) <br>
+DESP_SAUDE_SANEAMENTO_PERCAPITA (p = 0.02595) <br>
+<br>
+##### E as seguintes como não significativas:<br>
+<br>
+AGUA_ENCANADA_PRINCIPAL (p = 0.47322) <br>
+NAO_POSSUI_AGUA_ENCANADA (p = 0.96213) <br>
+QTD_FORM_SUP (p = 0.75850) <br>
+DENSIDADE_DEMO (p = 0.81812) <br>
+INDICE_ENVELHECIMENTO (p = 0.18875) <br>
+POP_PARDA (p = 0.51388) <br>
+PARTICIPACAO_PIB_MESOREGIAO (p = 0.79241) <br>
+
+#### Correlação
+```{r}
+variaveis_correlacao <- dados[, c("PIB_POR_HABITANTE", "PERC_COLETA_LIXO", "PERC_ACESSO_INTERNET", "PERC_ALFA_15MAIS", 
+                                  "QTD_FORM_SUP_EDUC", "TX_CRESC_GEO", "POP_PRETA", 
+                                  "TX_SUICIDIO", "ARRECADACAO_TOTAL_IMPOSTOS_PERCAPITA", 
+                                  "VALOR_TOTAL_BF_PERCAPITA", "DESP_SAUDE_SANEAMENTO_PERCAPITA")]
+
+correlacao <- cor(variaveis_correlacao)
+```
+
+
+```{r}
+correlacao
+```
+
+## Conclusão 
+
+Com base nos resultados da análise de regressão Beta, diversas variáveis socioeconômicas e demográficas apresentam uma associação significativa com o índice de Gini, que é uma medida da desigualdade de renda.
+
+As variáveis com **p-valor significativo** (menor que 0.05) incluem:
+
+- **PERC_COLETA_LIXO**: A proporção de coleta de lixo tem uma associação negativa com o índice de Gini, indicando que um aumento na coleta de lixo está associado a uma redução na desigualdade de renda.
+- **PERC_ACESSO_INTERNET**: O acesso à internet também mostra uma relação negativa com o índice de Gini, sugerindo que maior acesso à internet pode estar relacionado com menores níveis de desigualdade.
+- **PERC_ALFA_15MAIS**: A porcentagem da população com alfabetização de 15 anos ou mais tem uma associação negativa com a desigualdade de renda, indicando que o aumento da alfabetização pode reduzir a desigualdade.
+- **QTD_FORM_SUP_EDUC**: A quantidade de pessoas com formação superior está positivamente associada ao índice de Gini, ou seja, um aumento nessa variável está associado a maior desigualdade de renda.
+- **TX_CRESC_GEO**: O crescimento geográfico tem um efeito negativo sobre a desigualdade, com crescimento geográfico associado a uma redução no índice de Gini.
+- **POP_PRETA**: A proporção de pessoas negras na população tem uma associação negativa significativa, sugerindo que maior proporção de população preta está relacionada com menor desigualdade.
+- **TX_SUICIDIO**: A taxa de suicídios também apresenta uma associação negativa, possivelmente indicando que áreas com maior taxa de suicídio estão associadas a maior desigualdade de renda.
+- **ARRECADACAO_TOTAL_IMPOSTOS_PERCAPITA**: A arrecadação total de impostos per capita tem uma associação positiva com a desigualdade de renda, sugerindo que maiores níveis de arrecadação podem estar relacionados a uma maior desigualdade.
+- **VALOR_TOTAL_BF_PERCAPITA**: O valor do benefício social per capita mostra uma associação positiva com o índice de Gini, implicando que, quanto maior o valor do benefício, maior a desigualdade de renda.
+- **DESP_SAUDE_SANEAMENTO_PERCAPITA**: A despesa per capita com saúde e saneamento apresenta uma relação negativa com a desigualdade, indicando que maiores investimentos em saúde e saneamento podem ajudar a reduzir a desigualdade de renda.
+
+Essas conclusões apontam para a complexa interação entre variáveis socioeconômicas, demográficas e políticas públicas na formação da desigualdade de renda, representada pelo índice de Gini.
+
+
