@@ -1,0 +1,663 @@
+---
+title: "Séries Temporais"
+subtitle: "Disciplina: Econometria <br> Professor: Pedro M. Almeida Junior"
+author: 
+  - name: "Felipe Ribeiro do Nascimento"
+    affiliation: "Universidade Estadual da Paraíba"
+date: 2025-05-19
+format: revealjs
+execute:
+  echo: false
+  jupyter: python3
+theme: solarized
+transition: fade
+mathjax: true
+footer: ""
+---
+
+# IPCA
+
+<div style="text-align: justify; font-size: 70%;">
+
+O Índice Nacional de Preços ao Consumidor Amplo (IPCA) é o principal indicador utilizado no Brasil para medir a variação dos preços de produtos e serviços consumidos pela população. Calculado pelo IBGE, o IPCA abrange despesas de alimentação, habitação, transportes, saúde, educação, entre outros setores, refletindo a inflação no país.
+
+Atualizado em 09 Mai, 2025 15:18
+
+</div>
+
+```{python}
+#| echo: false
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import HTML
+import plotly.express as px
+import seaborn as sns
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsforecast import StatsForecast
+#from statsforecast.models import AutoETS
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sktime.forecasting.ets import AutoETS
+from sktime.forecasting.base import ForecastingHorizon
+
+```
+
+
+```{python}
+#| echo: false
+caminho = '/Users/felipe/Documents/UEPB/Econometria/indice_lista.csv' 
+
+
+ipca = pd.read_csv(caminho, delimiter=';')
+
+# Converter a coluna 'Mes-Ano' para o tipo datetime
+ipca['Mes-Ano'] = pd.to_datetime(ipca['Mes-Ano'], format='%m-%Y')
+
+
+```
+
+## Estatística Descritiva
+
+```{python}
+#| echo: false
+estatisticas = ipca["Indice"].describe().round(2).to_frame(name="Índice IPCA")
+
+estilo = """
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;} /* Mantém os cabeçalhos centralizados, se preferir */
+</style>
+"""
+display(HTML(estilo + estatisticas.round(2).to_html()))
+
+```
+
+## Gráfico
+```{python}
+#| echo: false
+
+fig = px.line(
+    ipca,
+    x='Mes-Ano',
+    y='Indice',
+    markers=True,
+    title='Índice IPCA',
+    labels={'Índice': 'Índice IPCA'},
+    hover_data={
+        'Mes-Ano': True,'Indice': ':.3f'
+    }
+)
+fig.show()
+```
+
+## ACF e PACF da variável Índice
+```{python}
+#| echo: false
+# ACF e PACF da variável Índice
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+plot_acf(ipca['Indice'], lags=24, ax=axes[0])
+plot_pacf(ipca['Indice'], lags=24, ax=axes[1])
+axes[0].set_title('ACF da variável Índice')
+axes[1].set_title('PACF da variável Índice')
+plt.tight_layout()
+plt.show()
+```
+
+
+## Análise sazonal
+```{python}
+#| echo: false
+result = seasonal_decompose(ipca['Indice'], model='additive', period=12)
+result.plot()
+plt.suptitle("Decomposição aditiva da série IPCA", fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
+## Previsão (Aditivo Simples)
+```{python}
+ipca = ipca.set_index('Mes-Ano')
+ipca.index = pd.to_datetime(ipca.index)
+ipca.index = ipca.index.to_period('M')  # ✅ necessário para sktime
+
+# 2. Separar em treino e teste
+train = ipca[:'2023-12']
+test = ipca['2024-01':]
+
+# 3. Definir série de treino e horizonte de previsão
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False)  # 14 meses futuros
+
+# 4. Instanciar e ajustar modelo AutoETS do sktime
+model = AutoETS(auto=False, error='add', seasonal='add', sp=12)
+model.fit(y_train)
+
+# 5. Prever os próximos 14 meses
+y_pred = model.predict(fh)
+
+# 6. Visualizar previsão
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do IPCA mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("IPCA")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Avaliação do modelo
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Com Tendencia)
+```{python}
+
+
+# 2. Separar em treino e teste
+train = ipca[:'2023-12']
+test = ipca['2024-01':]
+
+# 3. Definir série de treino e horizonte de previsão
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False)  # 14 meses futuros
+
+# 4. Instanciar e ajustar modelo AutoETS do sktime
+model = AutoETS(auto=False, error='add', trend='add', seasonal='add', sp=12)
+model.fit(y_train)
+
+# 5. Prever os próximos 14 meses
+y_pred = model.predict(fh)
+
+# 6. Visualizar previsão
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do IPCA mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("IPCA")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Avaliação do modelo
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Sem sazonalidade)
+```{python}
+
+# 2. Separar em treino e teste
+train = ipca[:'2023-12']
+test = ipca['2024-01':]
+
+# 3. Definir série de treino e horizonte de previsão
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False)  # 14 meses futuros
+
+# 4. Instanciar e ajustar modelo AutoETS do sktime
+model = AutoETS(auto=False, error='add', sp=12)
+model.fit(y_train)
+
+# 5. Prever os próximos 14 meses
+y_pred = model.predict(fh)
+
+# 6. Visualizar previsão
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do IPCA mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("IPCA")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Avaliação do modelo
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+
+
+# BITCOIN
+
+<div style="text-align: justify; font-size: 70%;">
+
+Bitcoin é uma moeda digital (criptomoeda) criada em 2009, ela utiliza da tecnologia blockchain para registro público
+e seguro das transações, pode ser utilizada para investimentos, meio de pagamento ou reserva de valor, muito volatil.
+
+
+</div>
+
+
+```{python}
+#| echo: false
+caminho = '/Users/felipe/Documents/UEPB/Econometria/cotacaobtc.csv' 
+
+
+bitcoin = pd.read_csv(caminho, delimiter=';')
+
+# Converter a coluna 'Mes-Ano' para o tipo datetime
+bitcoin['Mes-Ano'] = pd.to_datetime(bitcoin['Mes-Ano'], format='%m-%Y')
+
+
+```
+
+## Estatística Descritiva
+
+```{python}
+#| echo: false
+estatisticas = bitcoin["Fechamento"].describe().round(2).to_frame(name="Cotação Bitcoin")
+
+estilo = """
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;} /* Mantém os cabeçalhos centralizados, se preferir */
+</style>
+"""
+display(HTML(estilo + estatisticas.round(2).to_html()))
+
+```
+
+## Gráfico
+```{python}
+#| echo: false
+
+fig = px.line(
+    bitcoin,
+    x='Mes-Ano',
+    y='Fechamento',
+    markers=True,
+    title='Cotação Bitcoin Fechamento Mensal',
+    labels={'Cotação': 'Cotação Bitcoin'},
+    hover_data={
+        'Mes-Ano': True,'Fechamento': ':.2f'
+    }
+)
+fig.show()
+```
+
+## ACF e PACF da variável Cotação Bitcoin
+```{python}
+#| echo: false
+# ACF e PACF da variável Bitcoin
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+plot_acf(bitcoin['Fechamento'], lags=24, ax=axes[0])
+plot_pacf(bitcoin['Fechamento'], lags=24, ax=axes[1])
+axes[0].set_title('ACF da variável Bitcoin')
+axes[1].set_title('PACF da variável BItcoin')
+plt.tight_layout()
+plt.show()
+```
+
+
+## Análise sazonal
+```{python}
+#| echo: false
+result = seasonal_decompose(bitcoin['Fechamento'], model='additive', period=12)
+result.plot()
+plt.suptitle("Decomposição aditiva da série Bitcoin", fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
+## Previsão (Aditivo Simples)
+```{python}
+bitcoin = bitcoin.set_index('Mes-Ano')
+bitcoin.index = pd.to_datetime(bitcoin.index)
+bitcoin.index = bitcoin.index.to_period('M') 
+
+
+train = bitcoin[:'2023-12']
+test = bitcoin['2024-01':]
+
+
+y_train = train['Fechamento']
+fh = ForecastingHorizon(test.index[:12], is_relative=False) 
+
+
+model = AutoETS(auto=False, error='add', seasonal='add', sp=12)
+model.fit(y_train)
+
+
+y_pred = model.predict(fh)
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Fechamento'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Bitcoin mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Bitcoin")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Avaliação do modelo
+y_true = test['Fechamento'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Com Tendencia)
+```{python}
+
+
+train = bitcoin[:'2023-12']
+test = bitcoin['2024-01':]
+
+y_train = train['Fechamento']
+fh = ForecastingHorizon(test.index[:14], is_relative=False)
+
+
+model = AutoETS(auto=False, error='add', trend='add', seasonal='add', sp=12)
+model.fit(y_train)
+
+
+y_pred = model.predict(fh)
+
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Fechamento'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Bitcoin mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Bitcoin")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+y_true = test['Fechamento'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Sem sazonalidade)
+```{python}
+
+
+train = bitcoin[:'2023-12']
+test = bitcoin['2024-01':]
+
+y_train = train['Fechamento']
+fh = ForecastingHorizon(test.index[:14], is_relative=False)
+
+
+model = AutoETS(auto=False, error='add', sp=12)
+model.fit(y_train)
+
+
+y_pred = model.predict(fh)
+
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Fechamento'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Bitcoin mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Bitcoin")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+y_true = test['Fechamento'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+# PMC
+
+<div style="text-align: justify; font-size: 70%;">
+
+Índice do volume de vendas no comércio varejista <BR>
+Período: fev 2000 - fev 2025 <BR>
+São Paulo - Brasil <BR>
+
+
+</div>
+
+
+```{python}
+
+caminho = '/Users/felipe/Documents/UEPB/Econometria/pmc_novo.csv' 
+
+pmc = pd.read_csv(caminho, delimiter=';')
+
+pmc['Mes-Ano'] = pd.to_datetime(pmc['Mes-Ano'], format='%m-%Y')
+
+```
+
+## Estatística Descritiva
+
+```{python}
+estatisticas = pmc["Indice"].describe().round(2).to_frame(name="Indice PMC")
+
+estilo = """
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;}
+</style>
+"""
+display(HTML(estilo + estatisticas.round(2).to_html()))
+
+```
+
+## Gráfico
+```{python}
+
+
+fig = px.line(
+    pmc,
+    x='Mes-Ano',
+    y='Indice',
+    markers=True,
+    title='Indice PMC Mensal',
+    labels={'Indice': 'Indice PMC'},
+    hover_data={
+        'Mes-Ano': True,'Indice': ':.3f'
+    }
+)
+fig.show()
+```
+
+## ACF e PACF da variável Índice PMC
+```{python}
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+plot_acf(pmc['Indice'], lags=24, ax=axes[0])
+plot_pacf(pmc['Indice'], lags=24, ax=axes[1])
+axes[0].set_title('ACF da variável Indice PMC')
+axes[1].set_title('PACF da variável Indice PMC')
+plt.tight_layout()
+plt.show()
+```
+
+
+## Análise sazonal
+```{python}
+
+result = seasonal_decompose(pmc['Indice'], model='additive', period=12)
+result.plot()
+plt.suptitle("Decomposição aditiva da série Índice PMC", fontsize=14)
+plt.tight_layout()
+plt.show()
+```
+
+## Previsão (Aditivo Simples)
+```{python}
+pmc = pmc.set_index('Mes-Ano')
+pmc.index = pd.to_datetime(pmc.index)
+pmc.index = pmc.index.to_period('M') 
+
+
+train = pmc[:'2023-12']
+test = pmc['2024-01':]
+
+
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False) 
+
+
+model = AutoETS(auto=False, error='add', seasonal='add', sp=14)
+model.fit(y_train)
+
+
+y_pred = model.predict(fh)
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Índice PMC mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Indice")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 7. Avaliação do modelo
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Com Tendencia)
+```{python}
+
+train = pmc[:'2023-12']
+test = pmc['2024-01':]
+
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False) 
+
+model = AutoETS(auto=False, error='add', trend='add', seasonal='add', sp=14)
+model.fit(y_train)
+
+y_pred = model.predict(fh)
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Índice PMC mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Índice PMC")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Previsão (Sem sazonalidade)
+```{python}
+
+
+train = pmc[:'2023-12']
+test = pmc['2024-01':]
+
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False) 
+
+model = AutoETS(auto=False, error='add', sp=14)
+model.fit(y_train)
+
+y_pred = model.predict(fh)
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Índice PMC mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Índice PMC")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+
+## Previsão (sazonalidade multiplicativa)
+```{python}
+
+
+train = pmc[:'2023-12']
+test = pmc['2024-01':]
+
+y_train = train['Indice']
+fh = ForecastingHorizon(test.index[:14], is_relative=False) 
+
+model = AutoETS(auto=False, error='add', seasonal='mul', sp=14)
+model.fit(y_train)
+
+y_pred = model.predict(fh)
+
+plt.figure(figsize=(12, 5))
+plt.plot(y_train.index.to_timestamp(), y_train, label='Treinamento')
+plt.plot(test.index.to_timestamp(), test['Indice'], label='Teste', color='black')
+plt.plot(y_pred.index.to_timestamp(), y_pred.values, label='Previsão ETS', linestyle='--', color='orange')
+plt.title("Previsão do Índice PMC mensal (2024-2025)")
+plt.xlabel("Data")
+plt.ylabel("Índice PMC")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+y_true = test['Indice'].values[:14]
+y_forecast = y_pred.values
+
+print("MAE:", mean_absolute_error(y_true, y_forecast))
+print("MSE:", mean_squared_error(y_true, y_forecast))
+```
+
+## Fontes
+
+https://www.dadosdemercado.com.br/indices/ipca
+
+https://www.statmuse.com/money/ask/bitcoin-price-monthly-2020-to-2024
+
+https://https://sidra.ibge.gov.br/tabela/8880
+
+
+
+

@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="ApresentacaoEconometriaAt1Un2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/tabby.min.js"></script>
+<script src="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/popper.min.js"></script>
+<script src="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="ApresentacaoEconometriaAt1Un2_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.31">
+
+  <meta name="author" content="Felipe Ribeiro do Nascimento">
+  <meta name="dcterms.date" content="2025-05-19">
+  <title>Séries Temporais</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/dist/theme/quarto-8a5cdbf101a0845817b98f2425171703.css">
+  <link href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+  
+  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Séries Temporais</h1>
+  <p class="subtitle">Disciplina: Econometria <br> Professor: Pedro M. Almeida Junior</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Felipe Ribeiro do Nascimento 
+</div>
+        <p class="quarto-title-affiliation">
+            Universidade Estadual da Paraíba
+          </p>
+    </div>
+</div>
+
+  <p class="date">2025-05-19</p>
+</section>
+<section>
+<section id="ipca" class="title-slide slide level1 center">
+<h1>IPCA</h1>
+<div style="text-align: justify; font-size: 70%;">
+<p>O Índice Nacional de Preços ao Consumidor Amplo (IPCA) é o principal indicador utilizado no Brasil para medir a variação dos preços de produtos e serviços consumidos pela população. Calculado pelo IBGE, o IPCA abrange despesas de alimentação, habitação, transportes, saúde, educação, entre outros setores, refletindo a inflação no país.</p>
+<p>Atualizado em 09 Mai, 2025 15:18</p>
+</div>
+</section>
+<section id="estatística-descritiva" class="slide level2">
+<h2>Estatística Descritiva</h2>
+<div id="b628f98e" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;} /* Mantém os cabeçalhos centralizados, se preferir */
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Índice IPCA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>304.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>0.50</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>0.40</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>-0.68</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>0.26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>0.45</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>0.68</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>3.02</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gráfico" class="slide level2">
+<h2>Gráfico</h2>
+<div id="2908101c" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+        <script type="text/javascript">
+        window.PlotlyConfig = {MathJaxConfig: 'local'};
+        if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+        </script>
+        <script type="module">import "https://cdn.plot.ly/plotly-3.0.1.min"</script>
+        
+</div>
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="c1b0a524-bc72-4e10-bf82-eced0f9be300" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("c1b0a524-bc72-4e10-bf82-eced0f9be300")) {                    Plotly.newPlot(                        "c1b0a524-bc72-4e10-bf82-eced0f9be300",                        [{"hovertemplate":"Mes-Ano=%{x}\u003cbr\u003eIndice=%{y:.3f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2000-01-01T00:00:00.000000000","2000-02-01T00:00:00.000000000","2000-03-01T00:00:00.000000000","2000-04-01T00:00:00.000000000","2000-05-01T00:00:00.000000000","2000-06-01T00:00:00.000000000","2000-07-01T00:00:00.000000000","2000-08-01T00:00:00.000000000","2000-09-01T00:00:00.000000000","2000-10-01T00:00:00.000000000","2000-11-01T00:00:00.000000000","2000-12-01T00:00:00.000000000","2001-01-01T00:00:00.000000000","2001-02-01T00:00:00.000000000","2001-03-01T00:00:00.000000000","2001-04-01T00:00:00.000000000","2001-05-01T00:00:00.000000000","2001-06-01T00:00:00.000000000","2001-07-01T00:00:00.000000000","2001-08-01T00:00:00.000000000","2001-09-01T00:00:00.000000000","2001-10-01T00:00:00.000000000","2001-11-01T00:00:00.000000000","2001-12-01T00:00:00.000000000","2002-01-01T00:00:00.000000000","2002-02-01T00:00:00.000000000","2002-03-01T00:00:00.000000000","2002-04-01T00:00:00.000000000","2002-05-01T00:00:00.000000000","2002-06-01T00:00:00.000000000","2002-07-01T00:00:00.000000000","2002-08-01T00:00:00.000000000","2002-09-01T00:00:00.000000000","2002-10-01T00:00:00.000000000","2002-11-01T00:00:00.000000000","2002-12-01T00:00:00.000000000","2003-01-01T00:00:00.000000000","2003-02-01T00:00:00.000000000","2003-03-01T00:00:00.000000000","2003-04-01T00:00:00.000000000","2003-05-01T00:00:00.000000000","2003-06-01T00:00:00.000000000","2003-07-01T00:00:00.000000000","2003-08-01T00:00:00.000000000","2003-09-01T00:00:00.000000000","2003-10-01T00:00:00.000000000","2003-11-01T00:00:00.000000000","2003-12-01T00:00:00.000000000","2004-01-01T00:00:00.000000000","2004-02-01T00:00:00.000000000","2004-03-01T00:00:00.000000000","2004-04-01T00:00:00.000000000","2004-05-01T00:00:00.000000000","2004-06-01T00:00:00.000000000","2004-07-01T00:00:00.000000000","2004-08-01T00:00:00.000000000","2004-09-01T00:00:00.000000000","2004-10-01T00:00:00.000000000","2004-11-01T00:00:00.000000000","2004-12-01T00:00:00.000000000","2005-01-01T00:00:00.000000000","2005-02-01T00:00:00.000000000","2005-03-01T00:00:00.000000000","2005-04-01T00:00:00.000000000","2005-05-01T00:00:00.000000000","2005-06-01T00:00:00.000000000","2005-07-01T00:00:00.000000000","2005-08-01T00:00:00.000000000","2005-09-01T00:00:00.000000000","2005-10-01T00:00:00.000000000","2005-11-01T00:00:00.000000000","2005-12-01T00:00:00.000000000","2006-01-01T00:00:00.000000000","2006-02-01T00:00:00.000000000","2006-03-01T00:00:00.000000000","2006-04-01T00:00:00.000000000","2006-05-01T00:00:00.000000000","2006-06-01T00:00:00.000000000","2006-07-01T00:00:00.000000000","2006-08-01T00:00:00.000000000","2006-09-01T00:00:00.000000000","2006-10-01T00:00:00.000000000","2006-11-01T00:00:00.000000000","2006-12-01T00:00:00.000000000","2007-01-01T00:00:00.000000000","2007-02-01T00:00:00.000000000","2007-03-01T00:00:00.000000000","2007-04-01T00:00:00.000000000","2007-05-01T00:00:00.000000000","2007-06-01T00:00:00.000000000","2007-07-01T00:00:00.000000000","2007-08-01T00:00:00.000000000","2007-09-01T00:00:00.000000000","2007-10-01T00:00:00.000000000","2007-11-01T00:00:00.000000000","2007-12-01T00:00:00.000000000","2008-01-01T00:00:00.000000000","2008-02-01T00:00:00.000000000","2008-03-01T00:00:00.000000000","2008-04-01T00:00:00.000000000","2008-05-01T00:00:00.000000000","2008-06-01T00:00:00.000000000","2008-07-01T00:00:00.000000000","2008-08-01T00:00:00.000000000","2008-09-01T00:00:00.000000000","2008-10-01T00:00:00.000000000","2008-11-01T00:00:00.000000000","2008-12-01T00:00:00.000000000","2009-01-01T00:00:00.000000000","2009-02-01T00:00:00.000000000","2009-03-01T00:00:00.000000000","2009-04-01T00:00:00.000000000","2009-05-01T00:00:00.000000000","2009-06-01T00:00:00.000000000","2009-07-01T00:00:00.000000000","2009-08-01T00:00:00.000000000","2009-09-01T00:00:00.000000000","2009-10-01T00:00:00.000000000","2009-11-01T00:00:00.000000000","2009-12-01T00:00:00.000000000","2010-01-01T00:00:00.000000000","2010-02-01T00:00:00.000000000","2010-03-01T00:00:00.000000000","2010-04-01T00:00:00.000000000","2010-05-01T00:00:00.000000000","2010-06-01T00:00:00.000000000","2010-07-01T00:00:00.000000000","2010-08-01T00:00:00.000000000","2010-09-01T00:00:00.000000000","2010-10-01T00:00:00.000000000","2010-11-01T00:00:00.000000000","2010-12-01T00:00:00.000000000","2011-01-01T00:00:00.000000000","2011-02-01T00:00:00.000000000","2011-03-01T00:00:00.000000000","2011-04-01T00:00:00.000000000","2011-05-01T00:00:00.000000000","2011-06-01T00:00:00.000000000","2011-07-01T00:00:00.000000000","2011-08-01T00:00:00.000000000","2011-09-01T00:00:00.000000000","2011-10-01T00:00:00.000000000","2011-11-01T00:00:00.000000000","2011-12-01T00:00:00.000000000","2012-01-01T00:00:00.000000000","2012-02-01T00:00:00.000000000","2012-03-01T00:00:00.000000000","2012-04-01T00:00:00.000000000","2012-05-01T00:00:00.000000000","2012-06-01T00:00:00.000000000","2012-07-01T00:00:00.000000000","2012-08-01T00:00:00.000000000","2012-09-01T00:00:00.000000000","2012-10-01T00:00:00.000000000","2012-11-01T00:00:00.000000000","2012-12-01T00:00:00.000000000","2013-01-01T00:00:00.000000000","2013-02-01T00:00:00.000000000","2013-03-01T00:00:00.000000000","2013-04-01T00:00:00.000000000","2013-05-01T00:00:00.000000000","2013-06-01T00:00:00.000000000","2013-07-01T00:00:00.000000000","2013-08-01T00:00:00.000000000","2013-09-01T00:00:00.000000000","2013-10-01T00:00:00.000000000","2013-11-01T00:00:00.000000000","2013-12-01T00:00:00.000000000","2014-01-01T00:00:00.000000000","2014-02-01T00:00:00.000000000","2014-03-01T00:00:00.000000000","2014-04-01T00:00:00.000000000","2014-05-01T00:00:00.000000000","2014-06-01T00:00:00.000000000","2014-07-01T00:00:00.000000000","2014-08-01T00:00:00.000000000","2014-09-01T00:00:00.000000000","2014-10-01T00:00:00.000000000","2014-11-01T00:00:00.000000000","2014-12-01T00:00:00.000000000","2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000","2019-01-01T00:00:00.000000000","2019-02-01T00:00:00.000000000","2019-03-01T00:00:00.000000000","2019-04-01T00:00:00.000000000","2019-05-01T00:00:00.000000000","2019-06-01T00:00:00.000000000","2019-07-01T00:00:00.000000000","2019-08-01T00:00:00.000000000","2019-09-01T00:00:00.000000000","2019-10-01T00:00:00.000000000","2019-11-01T00:00:00.000000000","2019-12-01T00:00:00.000000000","2020-01-01T00:00:00.000000000","2020-02-01T00:00:00.000000000","2020-03-01T00:00:00.000000000","2020-04-01T00:00:00.000000000","2020-05-01T00:00:00.000000000","2020-06-01T00:00:00.000000000","2020-07-01T00:00:00.000000000","2020-08-01T00:00:00.000000000","2020-09-01T00:00:00.000000000","2020-10-01T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-12-01T00:00:00.000000000","2021-01-01T00:00:00.000000000","2021-02-01T00:00:00.000000000","2021-03-01T00:00:00.000000000","2021-04-01T00:00:00.000000000","2021-05-01T00:00:00.000000000","2021-06-01T00:00:00.000000000","2021-07-01T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-09-01T00:00:00.000000000","2021-10-01T00:00:00.000000000","2021-11-01T00:00:00.000000000","2021-12-01T00:00:00.000000000","2022-01-01T00:00:00.000000000","2022-02-01T00:00:00.000000000","2022-03-01T00:00:00.000000000","2022-04-01T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-06-01T00:00:00.000000000","2022-07-01T00:00:00.000000000","2022-08-01T00:00:00.000000000","2022-09-01T00:00:00.000000000","2022-10-01T00:00:00.000000000","2022-11-01T00:00:00.000000000","2022-12-01T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-02-01T00:00:00.000000000","2023-03-01T00:00:00.000000000","2023-04-01T00:00:00.000000000","2023-05-01T00:00:00.000000000","2023-06-01T00:00:00.000000000","2023-07-01T00:00:00.000000000","2023-08-01T00:00:00.000000000","2023-09-01T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-11-01T00:00:00.000000000","2023-12-01T00:00:00.000000000","2024-01-01T00:00:00.000000000","2024-02-01T00:00:00.000000000","2024-03-01T00:00:00.000000000","2024-04-01T00:00:00.000000000","2024-05-01T00:00:00.000000000","2024-06-01T00:00:00.000000000","2024-07-01T00:00:00.000000000","2024-08-01T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-10-01T00:00:00.000000000","2024-11-01T00:00:00.000000000","2024-12-01T00:00:00.000000000","2025-01-01T00:00:00.000000000","2025-02-01T00:00:00.000000000","2025-03-01T00:00:00.000000000","2025-04-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"16NwPQrX4z+kcD0K16PAPylcj8L1KMw\u002f4XoUrkfh2j97FK5H4XqEP3E9CtejcM0\u002fw\u002fUoXI\u002fC+T\u002f2KFyPwvX0P3E9CtejcM0\u002f7FG4HoXrwT97FK5H4XrUP+F6FK5H4eI\u002fPQrXo3A94j9xPQrXo3DdP1K4HoXrUdg\u002fj8L1KFyP4j89CtejcD3aP6RwPQrXo+A\u002fSOF6FK5H9T9mZmZmZmbmP+xRuB6F69E\u002fj8L1KFyP6j+4HoXrUbjmP83MzMzMzOQ\u002fpHA9Ctej4D8K16NwPQrXPzMzMzMzM+M\u002fmpmZmZmZ6T\u002fhehSuR+HKP+F6FK5H4do\u002fCtejcD0K8z\u002fNzMzMzMzkPwrXo3A9Cuc\u002f9ihcj8L19D8pXI\u002fC9SgIQM3MzMzMzABAAAAAAAAAAkAfhetRuB75P65H4XoUrvM\u002fCtejcD0K7z+F61G4HoXjPzMzMzMzM8O\u002fmpmZmZmZyT\u002fD9Shcj8LVP\u002fYoXI\u002fC9eg\u002fj8L1KFyP0j\u002fD9Shcj8LVP6RwPQrXo+A\u002fUrgehetR6D+F61G4HoXjPxSuR+F6FN4\u002frkfhehSu1z9SuB6F61HgP7gehetRuOY\u002fH4XrUbge7T8UrkfhehTmPx+F61G4HtU\u002fKVyPwvUo3D8UrkfhehTmP4XrUbgehes\u002fj8L1KFyP4j\u002fhehSuR+HiP4XrUbgeheM\u002f16NwPQrX6z9cj8L1KFzfP3sUrkfhepS\u002fAAAAAAAA0D\u002fD9Shcj8LFP2ZmZmZmZtY\u002fAAAAAAAA6D+amZmZmZnhPwrXo3A9Ctc\u002f4XoUrkfh4j89CtejcD3aP4XrUbgehds\u002f4XoUrkfhyj+amZmZmZm5P+F6FK5H4cq\u002fUrgehetRyD+amZmZmZmpP+F6FK5H4co\u002fH4XrUbge1T\u002fXo3A9CtfTP7gehetRuN4\u002fKVyPwvUo3D8pXI\u002fC9SjcP65H4XoUrtc\u002fAAAAAAAA0D\u002fsUbgehevRP+xRuB6F69E\u002fuB6F61G4zj8UrkfhehTePwrXo3A9Csc\u002fMzMzMzMz0z9SuB6F61HYP65H4XoUruc\u002fSOF6FK5H4T9cj8L1KFzfP7gehetRuN4\u002fmpmZmZmZ4T9I4XoUrkfpP65H4XoUruc\u002f9ihcj8L14D\u002fsUbgehevRP6RwPQrXo9A\u002fzczMzMzM3D8K16NwPQrXP+xRuB6F69E\u002fuB6F61G43j+amZmZmZnhP5qZmZmZmck\u002fuB6F61G43j8UrkfhehTePwrXo3A9Ctc\u002fuB6F61G4zj8zMzMzMzPDP7gehetRuM4\u002f7FG4HoXr0T89CtejcD3aP65H4XoUrtc\u002fAAAAAAAA6D\u002f2KFyPwvXoP6RwPQrXo+A\u002fPQrXo3A94j+F61G4HoXbPwAAAAAAAAAAexSuR+F6hD97FK5H4XqkP83MzMzMzNw\u002fAAAAAAAA6D+PwvUoXI\u002fqPylcj8L1KOQ\u002fj8L1KFyP6j+amZmZmZnpP0jhehSuR+k\u002fpHA9Ctej6D8UrkfhehTePzMzMzMzM8M\u002fexSuR+F6xD+uR+F6FK7XP\u002fYoXI\u002fC9eA\u002fhetRuB6F2z+kcD0K16PgPwAAAAAAAOA\u002f7FG4HoXr4T\u002fNzMzMzMzcP+F6FK5H4co\u002fexSuR+F65D8K16NwPQrXP3sUrkfherQ\u002fhetRuB6F2z89CtejcD3aPz0K16NwPeI\u002f4XoUrkfh4j8zMzMzMzPjP0jhehSuR+k\u002fhetRuB6F6z8zMzMzMzPjPxSuR+F6FN4\u002fmpmZmZmZ4T+uR+F6FK7XP6RwPQrXo9A\u002fuB6F61G4nj+4HoXrUbjOP2ZmZmZmZtY\u002fPQrXo3A94j9I4XoUrkfhP3E9CtejcO0\u002fmpmZmZmZ4T8UrkfhehTmP3E9CtejcO0\u002fcT0K16Nw5T9xPQrXo3DdP5qZmZmZmdk\u002fexSuR+F6hD8AAAAAAADQPz0K16NwPeI\u002f4XoUrkfh2j9SuB6F61HgP\u002fYoXI\u002fC9eg\u002f16NwPQrX8z+F61G4HoXzPx+F61G4HvU\u002fuB6F61G45j+uR+F6FK7nP0jhehSuR+k\u002f16NwPQrX4z8pXI\u002fC9SjMP0jhehSuR+E\u002fPQrXo3A96j8pXI\u002fC9SjwP7gehetRuO4\u002fUrgehetR9D\u002fNzMzMzMzsP4XrUbgehds\u002fhetRuB6F4z\u002f2KFyPwvXoP2ZmZmZmZtY\u002fpHA9Ctej4D8pXI\u002fC9SjcP3sUrkfherQ\u002fpHA9Ctej0D8K16NwPQrHPzMzMzMzM9M\u002fUrgehetR2D8fhetRuB7VPwAAAAAAANA\u002f7FG4HoXrwT\u002fXo3A9CtfTP3E9CtejcM2\u002fuB6F61G4zj9SuB6F61HIP3sUrkfhesQ\u002f4XoUrkfh2j\u002fsUbgehevRPylcj8L1KNw\u002fj8L1KFyP0j97FK5H4XrUPwrXo3A9Crc\u002fKVyPwvUozD+amZmZmZnZPylcj8L1KPQ\u002fH4XrUbge1T8K16NwPQq3v7gehetRuN4\u002fzczMzMzM3D\u002fhehSuR+HKvzMzMzMzM8M\u002fexSuR+F61D+F61G4HoXbPwAAAAAAAOg\u002fPQrXo3A94j+kcD0K16PAP3sUrkfheoQ\u002fUrgehetRyD8pXI\u002fC9Si8P3sUrkfheqS\u002fmpmZmZmZuT9SuB6F61HgP2ZmZmZmZvI\u002f4XoUrkfhyj8AAAAAAADQP+xRuB6F67E\u002f16NwPQrX079SuB6F61HYv6RwPQrXo9A\u002fCtejcD0K1z+4HoXrUbjOP3sUrkfheuQ\u002fhetRuB6F6z97FK5H4XrsP5qZmZmZmfU\u002fAAAAAAAA0D+F61G4HoXrP8P1KFyPwu0\u002f16NwPQrX0z+PwvUoXI\u002fqP\u002fYoXI\u002fC9eA\u002fuB6F61G47j\u002fXo3A9CtfrP4\u002fC9Shcj\u002fI\u002fAAAAAAAA9D9mZmZmZmbuP1yPwvUoXOc\u002fSOF6FK5H4T8pXI\u002fC9SjwP+xRuB6F6\u002fk\u002f9ihcj8L18D8UrkfhehTeP3E9CtejcOU\u002fw\u002fUoXI\u002fC5b8K16NwPQrXv4\u002fC9Shcj9K\u002f4XoUrkfh4j89CtejcD3aP9ejcD0K1+M\u002f9ihcj8L14D\u002fhehSuR+HqP7gehetRuOY\u002fhetRuB6F4z9xPQrXo3DNP3sUrkfherS\u002fuB6F61G4vj9xPQrXo3DNP6RwPQrXo9A\u002fuB6F61G4zj\u002fsUbgehevRP+xRuB6F6+E\u002f4XoUrkfh2j+PwvUoXI\u002fqP3sUrkfhesQ\u002fUrgehetR2D9xPQrXo3DdP+F6FK5H4co\u002fUrgehetR2D97FK5H4XqUvylcj8L1KNw\u002f7FG4HoXr4T\u002f2KFyPwvXYP6RwPQrXo+A\u002fexSuR+F6xD\u002f2KFyPwvX0P+xRuB6F6+E\u002fhetRuB6F2z8="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Mes-Ano"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Indice"}},"legend":{"tracegroupgap":0},"title":{"text":"\u00cdndice IPCA"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('c1b0a524-bc72-4e10-bf82-eced0f9be300');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</section>
+<section id="acf-e-pacf-da-variável-índice" class="slide level2">
+<h2>ACF e PACF da variável Índice</h2>
+<div id="6e460e00" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-6-output-1.png" width="1142" height="374"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="análise-sazonal" class="slide level2">
+<h2>Análise sazonal</h2>
+<div id="fafd5802" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-7-output-1.png" width="950" height="475"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="previsão-aditivo-simples" class="slide level2">
+<h2>Previsão (Aditivo Simples)</h2>
+<div id="a45535cd" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-8-output-1.png" width="972" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 0.21705942613121157
+MSE: 0.07984155292390706</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-com-tendencia" class="slide level2">
+<h2>Previsão (Com Tendencia)</h2>
+<div id="0dd02efd" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-9-output-1.png" width="972" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 0.22174929540998595
+MSE: 0.09513296803745495</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-sem-sazonalidade" class="slide level2">
+<h2>Previsão (Sem sazonalidade)</h2>
+<div id="88bcf695" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-10-output-1.png" width="972" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 0.22163219280920915
+MSE: 0.09842441615674923</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="bitcoin" class="title-slide slide level1 center">
+<h1>BITCOIN</h1>
+<div style="text-align: justify; font-size: 70%;">
+<p>Bitcoin é uma moeda digital (criptomoeda) criada em 2009, ela utiliza da tecnologia blockchain para registro público e seguro das transações, pode ser utilizada para investimentos, meio de pagamento ou reserva de valor, muito volatil.</p>
+</div>
+</section>
+<section id="estatística-descritiva-1" class="slide level2">
+<h2>Estatística Descritiva</h2>
+<div id="6ff7972c" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;} /* Mantém os cabeçalhos centralizados, se preferir */
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Cotação Bitcoin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>60.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>36961.57</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>21397.71</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>6438.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>19919.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>33891.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>50857.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>96449.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gráfico-1" class="slide level2">
+<h2>Gráfico</h2>
+<div id="68aabe9d" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="e08b8efa-b149-4979-ab8a-ebdb7a105e8b" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("e08b8efa-b149-4979-ab8a-ebdb7a105e8b")) {                    Plotly.newPlot(                        "e08b8efa-b149-4979-ab8a-ebdb7a105e8b",                        [{"hovertemplate":"Mes-Ano=%{x}\u003cbr\u003eFechamento=%{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2020-01-01T00:00:00.000000000","2020-02-01T00:00:00.000000000","2020-03-01T00:00:00.000000000","2020-04-01T00:00:00.000000000","2020-05-01T00:00:00.000000000","2020-06-01T00:00:00.000000000","2020-07-01T00:00:00.000000000","2020-08-01T00:00:00.000000000","2020-09-01T00:00:00.000000000","2020-10-01T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-12-01T00:00:00.000000000","2021-01-01T00:00:00.000000000","2021-02-01T00:00:00.000000000","2021-03-01T00:00:00.000000000","2021-04-01T00:00:00.000000000","2021-05-01T00:00:00.000000000","2021-06-01T00:00:00.000000000","2021-07-01T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-09-01T00:00:00.000000000","2021-10-01T00:00:00.000000000","2021-11-01T00:00:00.000000000","2021-12-01T00:00:00.000000000","2022-01-01T00:00:00.000000000","2022-02-01T00:00:00.000000000","2022-03-01T00:00:00.000000000","2022-04-01T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-06-01T00:00:00.000000000","2022-07-01T00:00:00.000000000","2022-08-01T00:00:00.000000000","2022-09-01T00:00:00.000000000","2022-10-01T00:00:00.000000000","2022-11-01T00:00:00.000000000","2022-12-01T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-02-01T00:00:00.000000000","2023-03-01T00:00:00.000000000","2023-04-01T00:00:00.000000000","2023-05-01T00:00:00.000000000","2023-06-01T00:00:00.000000000","2023-07-01T00:00:00.000000000","2023-08-01T00:00:00.000000000","2023-09-01T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-11-01T00:00:00.000000000","2023-12-01T00:00:00.000000000","2024-01-01T00:00:00.000000000","2024-02-01T00:00:00.000000000","2024-03-01T00:00:00.000000000","2024-04-01T00:00:00.000000000","2024-05-01T00:00:00.000000000","2024-06-01T00:00:00.000000000","2024-07-01T00:00:00.000000000","2024-08-01T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-10-01T00:00:00.000000000","2024-11-01T00:00:00.000000000","2024-12-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"f8","bdata":"AAAAAABDwkAAAAAAgLvAQAAAAAAAJrlAAAAAAIDawEAAAAAAAHLCQAAAAACA2MFAAAAAAIAdxkAAAAAAAMTGQAAAAAAADsVAAAAAAADqykAAAAAAgDzTQAAAAAAATtxAAAAAAEAr4EAAAAAAIArmQAAAAADAxOxAAAAAAMA17EAAAAAAgDTiQAAAAAAgHOFAAAAAAEBC5EAAAAAAANXnQAAAAACAZeVAAAAAAMDw7UAAAAAAoNXrQAAAAACgjuZAAAAAAOCL4kAAAAAAIBflQAAAAABAPOZAAAAAAEBq4kAAAAAAAAzfQAAAAAAA1dJAAAAAAADK1kAAAAAAQIbTQAAAAADA+dJAAAAAAMAc1EAAAAAAgMHQQAAAAADAKNBAAAAAAMCY1kAAAAAAwJrWQAAAAACAz9tAAAAAAECV3EAAAAAAAJXaQAAAAABAw91AAAAAAICL3EAAAAAAwFLZQAAAAAAAVtpAAAAAAIDt4EAAAAAAIGriQAAAAAAgo+RAAAAAAODK5EAAAAAAwOHtQAAAAABgavFAAAAAAKCb7UAAAAAAMHrwQAAAAADAmu5AAAAAAGCN70AAAAAAQMvsQAAAAABA7O5AAAAAAHAk8UAAAAAAEIz3QAAAAABQz\u002fZA"},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Mes-Ano"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Fechamento"}},"legend":{"tracegroupgap":0},"title":{"text":"Cota\u00e7\u00e3o Bitcoin Fechamento Mensal"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('e08b8efa-b149-4979-ab8a-ebdb7a105e8b');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</section>
+<section id="acf-e-pacf-da-variável-cotação-bitcoin" class="slide level2">
+<h2>ACF e PACF da variável Cotação Bitcoin</h2>
+<div id="74c420d7" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-14-output-1.png" width="1142" height="374"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="análise-sazonal-1" class="slide level2">
+<h2>Análise sazonal</h2>
+<div id="f297aa12" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-15-output-1.png" width="950" height="475"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="previsão-aditivo-simples-1" class="slide level2">
+<h2>Previsão (Aditivo Simples)</h2>
+<div id="f052f4d9" class="cell" data-execution_count="15">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-16-output-1.png" width="990" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 27703.838012245174
+MSE: 923183744.8965799</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-com-tendencia-1" class="slide level2">
+<h2>Previsão (Com Tendencia)</h2>
+<div id="495d45b7" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-17-output-1.png" width="990" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 21208.67436573493
+MSE: 564244281.5959525</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-sem-sazonalidade-1" class="slide level2">
+<h2>Previsão (Sem sazonalidade)</h2>
+<div id="fe60093d" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-18-output-1.png" width="990" height="449"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 25479.87189712437
+MSE: 845981049.9702569</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="pmc" class="title-slide slide level1 center">
+<h1>PMC</h1>
+<div style="text-align: justify; font-size: 70%;">
+<p>Índice do volume de vendas no comércio varejista <br> Período: fev 2000 - fev 2025 <br> São Paulo - Brasil <br></p>
+</div>
+</section>
+<section id="estatística-descritiva-2" class="slide level2">
+<h2>Estatística Descritiva</h2>
+<div id="f17be533" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display">
+<style>
+    table {font-size: 15px; width: 80%; margin: auto;}
+    th, td {padding: 2px !important; text-align: right !important;}
+    th {text-align: center !important;}
+</style>
+
+<table class="dataframe caption-top" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header" style="text-align: right;">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Indice PMC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">count</td>
+<td>302.00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">mean</td>
+<td>5094429.22</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">std</td>
+<td>3067422.74</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">min</td>
+<td>1246119.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">25%</td>
+<td>2133925.50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">50%</td>
+<td>4788838.50</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">75%</td>
+<td>6860800.25</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">max</td>
+<td>14209112.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="gráfico-2" class="slide level2">
+<h2>Gráfico</h2>
+<div id="5466be2d" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display">
+<div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="8cb549d7-5582-46fb-b1b3-1a29b4044ac0" class="plotly-graph-div" style="height:525px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("8cb549d7-5582-46fb-b1b3-1a29b4044ac0")) {                    Plotly.newPlot(                        "8cb549d7-5582-46fb-b1b3-1a29b4044ac0",                        [{"hovertemplate":"Mes-Ano=%{x}\u003cbr\u003eIndice PMC=%{y:.3f}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines+markers","name":"","orientation":"v","showlegend":false,"x":["2000-01-01T00:00:00.000000000","2000-02-01T00:00:00.000000000","2000-03-01T00:00:00.000000000","2000-04-01T00:00:00.000000000","2000-05-01T00:00:00.000000000","2000-06-01T00:00:00.000000000","2000-07-01T00:00:00.000000000","2000-08-01T00:00:00.000000000","2000-09-01T00:00:00.000000000","2000-10-01T00:00:00.000000000","2000-11-01T00:00:00.000000000","2000-12-01T00:00:00.000000000","2001-01-01T00:00:00.000000000","2001-02-01T00:00:00.000000000","2001-03-01T00:00:00.000000000","2001-04-01T00:00:00.000000000","2001-05-01T00:00:00.000000000","2001-06-01T00:00:00.000000000","2001-07-01T00:00:00.000000000","2001-08-01T00:00:00.000000000","2001-09-01T00:00:00.000000000","2001-10-01T00:00:00.000000000","2001-11-01T00:00:00.000000000","2001-12-01T00:00:00.000000000","2002-01-01T00:00:00.000000000","2002-02-01T00:00:00.000000000","2002-03-01T00:00:00.000000000","2002-04-01T00:00:00.000000000","2002-05-01T00:00:00.000000000","2002-06-01T00:00:00.000000000","2002-07-01T00:00:00.000000000","2002-08-01T00:00:00.000000000","2002-09-01T00:00:00.000000000","2002-10-01T00:00:00.000000000","2002-11-01T00:00:00.000000000","2002-12-01T00:00:00.000000000","2003-01-01T00:00:00.000000000","2003-02-01T00:00:00.000000000","2003-03-01T00:00:00.000000000","2003-04-01T00:00:00.000000000","2003-05-01T00:00:00.000000000","2003-06-01T00:00:00.000000000","2003-07-01T00:00:00.000000000","2003-08-01T00:00:00.000000000","2003-09-01T00:00:00.000000000","2003-10-01T00:00:00.000000000","2003-11-01T00:00:00.000000000","2003-12-01T00:00:00.000000000","2004-01-01T00:00:00.000000000","2004-02-01T00:00:00.000000000","2004-03-01T00:00:00.000000000","2004-04-01T00:00:00.000000000","2004-05-01T00:00:00.000000000","2004-06-01T00:00:00.000000000","2004-07-01T00:00:00.000000000","2004-08-01T00:00:00.000000000","2004-09-01T00:00:00.000000000","2004-10-01T00:00:00.000000000","2004-11-01T00:00:00.000000000","2004-12-01T00:00:00.000000000","2005-01-01T00:00:00.000000000","2005-02-01T00:00:00.000000000","2005-03-01T00:00:00.000000000","2005-04-01T00:00:00.000000000","2005-05-01T00:00:00.000000000","2005-06-01T00:00:00.000000000","2005-07-01T00:00:00.000000000","2005-08-01T00:00:00.000000000","2005-09-01T00:00:00.000000000","2005-10-01T00:00:00.000000000","2005-11-01T00:00:00.000000000","2005-12-01T00:00:00.000000000","2006-01-01T00:00:00.000000000","2006-02-01T00:00:00.000000000","2006-03-01T00:00:00.000000000","2006-04-01T00:00:00.000000000","2006-05-01T00:00:00.000000000","2006-06-01T00:00:00.000000000","2006-07-01T00:00:00.000000000","2006-08-01T00:00:00.000000000","2006-09-01T00:00:00.000000000","2006-10-01T00:00:00.000000000","2006-11-01T00:00:00.000000000","2006-12-01T00:00:00.000000000","2007-01-01T00:00:00.000000000","2007-02-01T00:00:00.000000000","2007-03-01T00:00:00.000000000","2007-04-01T00:00:00.000000000","2007-05-01T00:00:00.000000000","2007-06-01T00:00:00.000000000","2007-07-01T00:00:00.000000000","2007-08-01T00:00:00.000000000","2007-09-01T00:00:00.000000000","2007-10-01T00:00:00.000000000","2007-11-01T00:00:00.000000000","2007-12-01T00:00:00.000000000","2008-01-01T00:00:00.000000000","2008-02-01T00:00:00.000000000","2008-03-01T00:00:00.000000000","2008-04-01T00:00:00.000000000","2008-05-01T00:00:00.000000000","2008-06-01T00:00:00.000000000","2008-07-01T00:00:00.000000000","2008-08-01T00:00:00.000000000","2008-09-01T00:00:00.000000000","2008-10-01T00:00:00.000000000","2008-11-01T00:00:00.000000000","2008-12-01T00:00:00.000000000","2009-01-01T00:00:00.000000000","2009-02-01T00:00:00.000000000","2009-03-01T00:00:00.000000000","2009-04-01T00:00:00.000000000","2009-05-01T00:00:00.000000000","2009-06-01T00:00:00.000000000","2009-07-01T00:00:00.000000000","2009-08-01T00:00:00.000000000","2009-09-01T00:00:00.000000000","2009-10-01T00:00:00.000000000","2009-11-01T00:00:00.000000000","2009-12-01T00:00:00.000000000","2010-01-01T00:00:00.000000000","2010-02-01T00:00:00.000000000","2010-03-01T00:00:00.000000000","2010-04-01T00:00:00.000000000","2010-05-01T00:00:00.000000000","2010-06-01T00:00:00.000000000","2010-07-01T00:00:00.000000000","2010-08-01T00:00:00.000000000","2010-09-01T00:00:00.000000000","2010-10-01T00:00:00.000000000","2010-11-01T00:00:00.000000000","2010-12-01T00:00:00.000000000","2011-01-01T00:00:00.000000000","2011-02-01T00:00:00.000000000","2011-03-01T00:00:00.000000000","2011-04-01T00:00:00.000000000","2011-05-01T00:00:00.000000000","2011-06-01T00:00:00.000000000","2011-07-01T00:00:00.000000000","2011-08-01T00:00:00.000000000","2011-09-01T00:00:00.000000000","2011-10-01T00:00:00.000000000","2011-11-01T00:00:00.000000000","2011-12-01T00:00:00.000000000","2012-01-01T00:00:00.000000000","2012-02-01T00:00:00.000000000","2012-03-01T00:00:00.000000000","2012-04-01T00:00:00.000000000","2012-05-01T00:00:00.000000000","2012-06-01T00:00:00.000000000","2012-07-01T00:00:00.000000000","2012-08-01T00:00:00.000000000","2012-09-01T00:00:00.000000000","2012-10-01T00:00:00.000000000","2012-11-01T00:00:00.000000000","2012-12-01T00:00:00.000000000","2013-01-01T00:00:00.000000000","2013-02-01T00:00:00.000000000","2013-03-01T00:00:00.000000000","2013-04-01T00:00:00.000000000","2013-05-01T00:00:00.000000000","2013-06-01T00:00:00.000000000","2013-07-01T00:00:00.000000000","2013-08-01T00:00:00.000000000","2013-09-01T00:00:00.000000000","2013-10-01T00:00:00.000000000","2013-11-01T00:00:00.000000000","2013-12-01T00:00:00.000000000","2014-01-01T00:00:00.000000000","2014-02-01T00:00:00.000000000","2014-03-01T00:00:00.000000000","2014-04-01T00:00:00.000000000","2014-05-01T00:00:00.000000000","2014-06-01T00:00:00.000000000","2014-07-01T00:00:00.000000000","2014-08-01T00:00:00.000000000","2014-09-01T00:00:00.000000000","2014-10-01T00:00:00.000000000","2014-11-01T00:00:00.000000000","2014-12-01T00:00:00.000000000","2015-01-01T00:00:00.000000000","2015-02-01T00:00:00.000000000","2015-03-01T00:00:00.000000000","2015-04-01T00:00:00.000000000","2015-05-01T00:00:00.000000000","2015-06-01T00:00:00.000000000","2015-07-01T00:00:00.000000000","2015-08-01T00:00:00.000000000","2015-09-01T00:00:00.000000000","2015-10-01T00:00:00.000000000","2015-11-01T00:00:00.000000000","2015-12-01T00:00:00.000000000","2016-01-01T00:00:00.000000000","2016-02-01T00:00:00.000000000","2016-03-01T00:00:00.000000000","2016-04-01T00:00:00.000000000","2016-05-01T00:00:00.000000000","2016-06-01T00:00:00.000000000","2016-07-01T00:00:00.000000000","2016-08-01T00:00:00.000000000","2016-09-01T00:00:00.000000000","2016-10-01T00:00:00.000000000","2016-11-01T00:00:00.000000000","2016-12-01T00:00:00.000000000","2017-01-01T00:00:00.000000000","2017-02-01T00:00:00.000000000","2017-03-01T00:00:00.000000000","2017-04-01T00:00:00.000000000","2017-05-01T00:00:00.000000000","2017-06-01T00:00:00.000000000","2017-07-01T00:00:00.000000000","2017-08-01T00:00:00.000000000","2017-09-01T00:00:00.000000000","2017-10-01T00:00:00.000000000","2017-11-01T00:00:00.000000000","2017-12-01T00:00:00.000000000","2018-01-01T00:00:00.000000000","2018-02-01T00:00:00.000000000","2018-03-01T00:00:00.000000000","2018-04-01T00:00:00.000000000","2018-05-01T00:00:00.000000000","2018-06-01T00:00:00.000000000","2018-07-01T00:00:00.000000000","2018-08-01T00:00:00.000000000","2018-09-01T00:00:00.000000000","2018-10-01T00:00:00.000000000","2018-11-01T00:00:00.000000000","2018-12-01T00:00:00.000000000","2019-01-01T00:00:00.000000000","2019-02-01T00:00:00.000000000","2019-03-01T00:00:00.000000000","2019-04-01T00:00:00.000000000","2019-05-01T00:00:00.000000000","2019-06-01T00:00:00.000000000","2019-07-01T00:00:00.000000000","2019-08-01T00:00:00.000000000","2019-09-01T00:00:00.000000000","2019-10-01T00:00:00.000000000","2019-11-01T00:00:00.000000000","2019-12-01T00:00:00.000000000","2020-01-01T00:00:00.000000000","2020-02-01T00:00:00.000000000","2020-03-01T00:00:00.000000000","2020-04-01T00:00:00.000000000","2020-05-01T00:00:00.000000000","2020-06-01T00:00:00.000000000","2020-07-01T00:00:00.000000000","2020-08-01T00:00:00.000000000","2020-09-01T00:00:00.000000000","2020-10-01T00:00:00.000000000","2020-11-01T00:00:00.000000000","2020-12-01T00:00:00.000000000","2021-01-01T00:00:00.000000000","2021-02-01T00:00:00.000000000","2021-03-01T00:00:00.000000000","2021-04-01T00:00:00.000000000","2021-05-01T00:00:00.000000000","2021-06-01T00:00:00.000000000","2021-07-01T00:00:00.000000000","2021-08-01T00:00:00.000000000","2021-09-01T00:00:00.000000000","2021-10-01T00:00:00.000000000","2021-11-01T00:00:00.000000000","2021-12-01T00:00:00.000000000","2022-01-01T00:00:00.000000000","2022-02-01T00:00:00.000000000","2022-03-01T00:00:00.000000000","2022-04-01T00:00:00.000000000","2022-05-01T00:00:00.000000000","2022-06-01T00:00:00.000000000","2022-07-01T00:00:00.000000000","2022-08-01T00:00:00.000000000","2022-09-01T00:00:00.000000000","2022-10-01T00:00:00.000000000","2022-11-01T00:00:00.000000000","2022-12-01T00:00:00.000000000","2023-01-01T00:00:00.000000000","2023-02-01T00:00:00.000000000","2023-03-01T00:00:00.000000000","2023-04-01T00:00:00.000000000","2023-05-01T00:00:00.000000000","2023-06-01T00:00:00.000000000","2023-07-01T00:00:00.000000000","2023-08-01T00:00:00.000000000","2023-09-01T00:00:00.000000000","2023-10-01T00:00:00.000000000","2023-11-01T00:00:00.000000000","2023-12-01T00:00:00.000000000","2024-01-01T00:00:00.000000000","2024-02-01T00:00:00.000000000","2024-03-01T00:00:00.000000000","2024-04-01T00:00:00.000000000","2024-05-01T00:00:00.000000000","2024-06-01T00:00:00.000000000","2024-07-01T00:00:00.000000000","2024-08-01T00:00:00.000000000","2024-09-01T00:00:00.000000000","2024-10-01T00:00:00.000000000","2024-11-01T00:00:00.000000000","2024-12-01T00:00:00.000000000","2025-01-01T00:00:00.000000000","2025-02-01T00:00:00.000000000"],"xaxis":"x","y":{"dtype":"i4","bdata":"pwMTAPJ3EwBekhQAEx4UAKkGFQCPiBMA0tQUAOMnFQAM9hQA9HoVAMqsFQCYlx0A2fwTAKcDEwDKrBUA0tQUAOMnFQDqTxQA+6IUAFdqFQAM9hQAmrYWAIljFgAFsh4A+6IUAGW6EwAO+RYA9HoVADfHFgBXahUAsjEWALtcFwB4EBYAnLkYAHPrGABRKSEAWG0XAEgaFwDW2hgA5y0ZALY3GgDuVRgAgz4ZABknGgBKHRkAIlIbAPmDGwBdVyQAfBYaAPeAGQC\u002fYhsAM6UbAOozHQAbKhwAXnYdANrgHADJjRwAy5AeAPReHgA5kioAEwIdAPBYGgD0Xh4AqeodAGB5HwD0Xh4A\u002fYkfACZYHwCp6h0AWVEgALxAIADRfS0ADt0fAGaeHADUux8AvEAgAEDWIAAVBR8ADt0fAAa1IAAwgyAAOa4hACEzIgCx2i4Ai0ohACZYHwBMBCQA2MEjANrEJQCWeCQAp8skAJh7JgDrFyYALmQnAIIDKQDajDcAJjwoAIgoJgAJnCsAzXcpAGZmLgDgzSsAEscsAE7rLgCXXC0AqbIvAPxOLwCfTD4A8iMuAIQGKwCZXy8ABXowAHu\u002fMgAWzTAAH\u002fgxAJxlMwDl1jEAhu01AAFYNQCFskUA4LE0AOXWMQCByDgAoGs3AGElOgBOzzcA5Lc4ABaxOQBY+jgAWwA9ABGMPAD721AAzT87AANbNwC3xz0AXQM\u002fAPPrPwACPD4A8+s\u002fAGcuQADRRT8Ao1JCAMT4QgBVhFgAmypDAJD8PwB2YkcAajREAOqkRwBc5EUAdmJHAMLZSQALS0gAUZpLAKU5TQDU2GQAzARLAO\u002fJRADSDVEAX+pJABNXUAD31UwAh5lQAKMaVADZNVAAg3dVAK5IVwAYCW8Ai59UAFzITgCUylUAYtFUAPKUWAA+KFIAxcBUACKLVwBYplMAbwJaALRRXQANv3QAHWZaAC3VUQA14VkAnfVWAATrWgDmZlUAhXpXALhzWAC2cFYAlK5eAGS4XwCEB3kAoftaAH5SWAAib2AAQA9dAAjxXgD\u002fxV0AhV5gACyaYQC8eVwATUBiAMOFZABWFHwAIwFgAKoGWQBB11kAirpgAKjoYQCFXGAAlxliAISxYADtrGAAm7hiAPglaABAtoIAkj1iAMJeWAAGRmMA9rtgAHJbZQBNO2QAx3llAJemaQC5qWUA4adnAIGpcQAZqogAXwxoAGJFYABNsmMAUcpnAI93awAD3mgAXmlqABsUbwCq+mgAq7RuAONyeABZ45EAWwhuAAPnaACOL24AF2ZbAL0yZgAn7GsA80F1ADs8eACKznYAihCBANUzhwBYEqEAri96AI8WcwCksHsAGjR7ACtvhgCmQ4IAMrCLADddhgBUh4AAcOSIADvAkgCGsa4AweaGAOUqgQADYZAAPvaVAMOymwC1e5cA9l+aABtsmACjs5IAr12aAP1kogBBNMMAqn+WAPFNjADGrZ0AUmmcAPHVnQB5jpsACD+eAL\u002fPnADLQ5sADxudAPfNrAAtasoAvdKdANwPmgBriKoA3u6eAJcwrwAYXacA28WrANdurABBOqUA3MmtAGG3vgBY0NgA37mrAPuuogA="},"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Mes-Ano"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Indice PMC"}},"legend":{"tracegroupgap":0},"title":{"text":"Indice PMC Mensal"}},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('8cb549d7-5582-46fb-b1b3-1a29b4044ac0');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };            </script>        </div>
+</div>
+</div>
+</section>
+<section id="acf-e-pacf-da-variável-índice-pmc" class="slide level2">
+<h2>ACF e PACF da variável Índice PMC</h2>
+<div id="0c65d530" class="cell" data-execution_count="21">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-22-output-1.png" width="1142" height="374"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="análise-sazonal-2" class="slide level2">
+<h2>Análise sazonal</h2>
+<div id="91ecccf3" class="cell" data-execution_count="22">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-23-output-1.png" width="950" height="475"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="previsão-aditivo-simples-2" class="slide level2">
+<h2>Previsão (Aditivo Simples)</h2>
+<div id="a4eef4c6" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-24-output-1.png" width="961" height="451"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 694335.3156386577
+MSE: 1069146116669.3275</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-com-tendencia-2" class="slide level2">
+<h2>Previsão (Com Tendencia)</h2>
+<div id="c6708a0f" class="cell" data-execution_count="24">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-25-output-1.png" width="961" height="451"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 949029.4986488904
+MSE: 1184312969313.761</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-sem-sazonalidade-2" class="slide level2">
+<h2>Previsão (Sem sazonalidade)</h2>
+<div id="b1d57fe5" class="cell" data-execution_count="25">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-26-output-1.png" width="961" height="451"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 655951.5403243157
+MSE: 990105465110.4257</code></pre>
+</div>
+</div>
+</section>
+<section id="previsão-sazonalidade-multiplicativa" class="slide level2">
+<h2>Previsão (sazonalidade multiplicativa)</h2>
+<div id="55c5fcd3" class="cell" data-execution_count="26">
+<div class="cell-output cell-output-display">
+<div>
+<figure>
+<p><img data-src="ApresentacaoEconometriaAt1Un2_files/figure-revealjs/cell-27-output-1.png" width="961" height="451"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MAE: 815981.9138179453
+MSE: 1402073437641.4526</code></pre>
+</div>
+</div>
+</section>
+<section id="fontes" class="slide level2">
+<h2>Fontes</h2>
+<p>https://www.dadosdemercado.com.br/indices/ipca</p>
+<p>https://www.statmuse.com/money/ask/bitcoin-price-monthly-2020-to-2024</p>
+<p>https://https://sidra.ibge.gov.br/tabela/8880</p>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="ApresentacaoEconometriaAt1Un2_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'fade',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
